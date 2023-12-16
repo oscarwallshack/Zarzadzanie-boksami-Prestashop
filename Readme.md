@@ -8,7 +8,7 @@
 
 # PrestaShop Box Management Module
 
-The module enables uploading custom graphics as background for the box.
-The module allows entering the box name in the back office as well as the title displayed on the front office.
-The module enables linking each created box to any category, product, or static page existing in the back office. Categories are displayed in a tree-like structure.
-The boxes on the front office are responsive and adapt to different screen sizes.
+- The module enables uploading custom graphics as background for the box.
+- The module allows entering the box name in the back office as well as the title displayed on the front office.
+- The module enables linking each created box to any category, product, or static page existing in the back office. Categories are displayed in a tree-like structure.
+- The boxes on the front office are responsive and adapt to different screen sizes.
