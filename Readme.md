@@ -1,4 +1,4 @@
-# Zarzadzanie_boksami
+# Moduł Zarzadzanie Boksami dla Prestashop
 
 - Moduł zapewnia wgrywanie własnej grafiki jako tła boksu.
 - Moduł umożliwia wpisywanie nazwy boksa w back office oraz tytułu wyświetlanego na boksie na front office.
