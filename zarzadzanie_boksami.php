@@ -148,7 +148,6 @@ class Zarzadzanie_boksami extends Module
 
     public function getContent()
     {
-
         $submitAddNew = Tools::isSubmit('add_new');
         $submitDelete = Tools::isSubmit('delete');
         $submitEdit = Tools::isSubmit('edit');
@@ -221,7 +220,7 @@ class Zarzadzanie_boksami extends Module
         $query = 'INSERT INTO `' . _DB_PREFIX_ . 'zarzadzanie_boksami` 
         (`name`, `title`, `image_path`, `static_page_id`, `category_page_id`, `product_page_id`)
         VALUES
-        ("' . pSQL(Tools::getValue('boks_name')) . '", "' . pSQL(Tools::getValue('boks_title')) . '", "' . pSQL($this->uploadBoksImage()) . '", ' . (int)Tools::getValue('boks_static_page') . ', ' . (int)Tools::getValue('boks_category_page_id') . ', ' . (int)Tools::getValue('boks_product_page') . ')';
+        ("' . pSQL(Tools::getValue('boks_name')) . '", "' . pSQL(Tools::getValue('boks_title')) . '", "' . pSQL($this->manageBoksImage('upload')) . '", ' . (int)Tools::getValue('boks_static_page') . ', ' . (int)Tools::getValue('boks_category_page_id') . ', ' . (int)Tools::getValue('boks_product_page') . ')';
 
         $this->executeQueryAndRedirect($query, 'Dodano nowy boks.');
     }
@@ -232,6 +231,7 @@ class Zarzadzanie_boksami extends Module
 
         if ($boksId > 0) {
             $query = 'DELETE FROM `' . _DB_PREFIX_ . 'zarzadzanie_boksami` WHERE `id` = ' . $boksId;
+            $this->manageBoksImage('delete', $boksId);
             $this->executeQueryAndRedirect($query);
         } else {
             $this->context->controller->errors[] = $this->l('Nieprawidłowe ID boksa.');
@@ -263,7 +263,7 @@ class Zarzadzanie_boksami extends Module
             $query = 'UPDATE `' . _DB_PREFIX_ . 'zarzadzanie_boksami` SET
             `name` = "' . pSQL(Tools::getValue('boks_name')) . '",
             `title` = "' . pSQL(Tools::getValue('boks_title')) . '",
-            `image_path` = "' . pSQL($this->uploadBoksImage()) . '",
+            `image_path` = "' . pSQL($this->manageBoksImage('upload')) . '",
             `static_page_id` = ' . (int)Tools::getValue('boks_static_page') . ',
             `category_page_id` = ' . (int)Tools::getValue('boks_category_page_id') . ',
             `product_page_id` = ' . (int)Tools::getValue('boks_product_page') . '
@@ -299,36 +299,46 @@ class Zarzadzanie_boksami extends Module
             $this->context->controller->errors[] = $this->l('Błąd podczas wykonywania zapytania.');
         }
     }
-
-
-    public function uploadBoksImage()
+    public function manageBoksImage($action, $boksId = null)
     {
         $boksImagePath = Tools::getValue('imageFromDb');
-        $allowedFormats = array('jpg', 'jpeg', 'png');
-        if (isset($_FILES['boks_image']) && $_FILES['boks_image']['error'] == 0) {
-            $uploadDir = _PS_MODULE_DIR_ . $this->name . '/uploads/';
-            $uploadFile = $uploadDir . basename($_FILES['boks_image']['name']);
-            $fileInfo = pathinfo($_FILES['boks_image']['name']);
-            $fileFormat = strtolower($fileInfo['extension']);
+        if ($action === 'upload') {
+            $allowedFormats = array('jpg', 'jpeg', 'png');
 
-            if (in_array($fileFormat, $allowedFormats)) {
-                if (move_uploaded_file($_FILES['boks_image']['tmp_name'], $uploadFile)) {
-                    $boksImagePath = _PS_BASE_URL_ . __PS_BASE_URI__ . '/modules/' . $this->name . '/uploads/' . basename($_FILES['boks_image']['name']);
-                    $this->context->controller->confirmations[] = $this->l('Wgrano zdjęcie.');
+            if (isset($_FILES['boks_image']) && $_FILES['boks_image']['error'] == 0) {
+                $uploadDir = _PS_MODULE_DIR_ . $this->name . '/uploads/';
+                $uploadFile = $uploadDir . basename($_FILES['boks_image']['name']);
+                $fileInfo = pathinfo($_FILES['boks_image']['name']);
+                $fileFormat = strtolower($fileInfo['extension']);
+
+                if (in_array($fileFormat, $allowedFormats)) {
+                    if (move_uploaded_file($_FILES['boks_image']['tmp_name'], $uploadFile)) {
+                        $boksImagePath = _PS_BASE_URL_ . __PS_BASE_URI__ . '/modules/' . $this->name . '/uploads/' . basename($_FILES['boks_image']['name']);
+                        $this->context->controller->confirmations[] = $this->l('Wgrano zdjęcie.');
+                    } else {
+                        $this->context->controller->errors[] = $this->l('Błąd pobierania zdjęcia.');
+                    }
                 } else {
-                    $this->context->controller->errors[] = $this->l('Bład pobierania zdjęcia.');
+                    $this->context->controller->errors[] = $this->l('Niepoprawny format. Dozwolone: JPG, JPEG, PNG.');
+                }
+            }
+        } elseif ($action === 'delete') {
+            $image = Db::getInstance()->getRow('SELECT `image_path` FROM `' . _DB_PREFIX_ . 'zarzadzanie_boksami` WHERE `id` = ' . $boksId);
+            if ($boksId) {
+                $filePath = _PS_MODULE_DIR_ . $this->name . '/uploads/' . basename($image['image_path']);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                    $this->context->controller->confirmations[] = $this->l('Usunięto plik.');
+                } else {
+                    $this->context->controller->errors[] = $this->l('Nie udało się odnaleźć pliku do usunięcia.');
                 }
             } else {
-                $this->context->controller->errors[] = $this->l('Niepoprawny format. Dozwolone: JPG, JPEG, PNG.');
+                $this->context->controller->errors[] = $this->l('Nie udało się odnaleźć zdjęcia w bazie danych.');
             }
         }
-
-        // elseif ($boksImagePath){
-        //                 $boksImagePath = Tools::getValue('imageFromDb');
-
-        // }
         return $boksImagePath;
     }
+
 
     public function hookDisplayBackOfficeHeader()
     {
