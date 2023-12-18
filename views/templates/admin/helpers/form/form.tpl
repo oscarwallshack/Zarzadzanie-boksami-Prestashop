@@ -6,7 +6,7 @@
 		{/if}
 		{if isset($boks) && $boks.image_path != null}
 			<br>
-			<img name="imageFromDb"  src="{$boks.image_path}" width="300" height="auto">
+			<img name="imageFromDb" src="{$boks.image_path}" width="300" height="auto">
 			<input type="hidden" name="imageFromDb" value="{$boks.image_path}" />
 		{/if}
 
@@ -24,6 +24,10 @@
 			<input type="text" class="form-control form-control-lg"
 				placeholder="{l s='Podaj tytuł boksa' mod='zarzadzanie_boksami'}" name="boks_title" id="boks_title"
 				value="{if isset($boks) && $boks.title != null}{$boks.title}{/if}" />
+			<label class="form-control-label" for="input3">{l s='Link do strony' mod='zarzadzanie_boksami'}</label>
+			<input type="text" class="form-control form-control-lg"
+				placeholder="{l s='Podaj link do którego ma prowadzić boks' mod='zarzadzanie_boksami'}" name="boks_link"
+				id="boks_link" value="{if isset($boks) && $boks.link != null}{$boks.link}{/if}" />
 		</div>
 
 		<div class="panel">

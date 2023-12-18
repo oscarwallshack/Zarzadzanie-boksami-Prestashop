@@ -29,6 +29,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'zarzadzanie_boksami` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `title` VARCHAR(255),
+    `link` VARCHAR(255),
     `image_path` VARCHAR(255),
     `static_page_id` int(11),
     `category_page_id` int(11),
