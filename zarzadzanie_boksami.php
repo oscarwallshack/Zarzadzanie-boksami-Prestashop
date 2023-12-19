@@ -47,7 +47,7 @@ class Zarzadzanie_boksami extends Module
         parent::__construct();
 
         $this->displayName = $this->l('Zarzadzanie_boksami');
-        $this->description = $this->l('Zarzadzanie boksami projekt dla Ibif');
+        $this->description = $this->l('Zarzadzanie boksami');
     }
 
     public function install()
