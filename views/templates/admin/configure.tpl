@@ -26,8 +26,8 @@
 <div class="panel">
 	<h3><i class="icon icon-credit-card"></i> {l s='Zarzadzanie_boksami' mod='zarzadzanie_boksami'}</h3>
 	<p>
-		<strong>{l s='Sprawdź moje rozwiązanie zadania!' mod='zarzadzanie_boksami'}</strong><br />
-		{l s='Zarądzaj boksami na swoim sklepie!' mod='zarzadzanie_boksami'}<br />
+		<strong>{l s='Sprawdź mój moduł!' mod='zarzadzanie_boksami'}</strong><br />
+		{l s='Zarządzaj boksami na swoim sklepie!' mod='zarzadzanie_boksami'}<br />
 	</p>
 </div>
 
@@ -58,8 +58,8 @@
 						<img src="{$boks.image_path}" width="300" height="150" style="object-fit: contain;">
 						<input hidden name="imageFromDb" value="{$boks.image_path}">
 					{else}
-						<img src="{$adminLink}/modules/zarzadzanie_boksami/uploads/where_zdjecie.jpg" width="300"
-							height="150" style="object-fit: contain;">
+						<img src="{$adminLink}/modules/zarzadzanie_boksami/uploads/where_zdjecie.jpg" width="300" height="150"
+							style="object-fit: contain;">
 					{/if}
 
 				</div>
