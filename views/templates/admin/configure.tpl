@@ -58,7 +58,7 @@
 						<img src="{$boks.image_path}" width="300" height="150" style="object-fit: contain;">
 						<input hidden name="imageFromDb" value="{$boks.image_path}">
 					{else}
-						<img src="http://localhost/ibif//modules/zarzadzanie_boksami/uploads/where_zdjecie.jpg" width="300"
+						<img src="{$adminLink}/modules/zarzadzanie_boksami/uploads/where_zdjecie.jpg" width="300"
 							height="150" style="object-fit: contain;">
 					{/if}
 
